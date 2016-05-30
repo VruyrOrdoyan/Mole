@@ -1,0 +1,182 @@
+﻿var document_status = {
+    moleCanScrap: false,
+    isReady: false,
+    tabId: -1,
+    scenarioLoaded: false,
+    isDataPostedToMole: true,
+    storeData: null,
+    statusLine: ""
+};
+
+var actions = {
+    test: "test",
+    set_document_status: "set_document_status",
+    update_document_status: "update_document_status",
+    get_document_status: "get_document_status",
+    document_status: "document_status",
+    data_post_save: "data_post_save",
+    status: "status"
+};
+
+
+//var docStatis = document_status;
+
+//util
+
+function Communicator(){
+    var o = this;
+
+    this.loadScenario = function (docStatus) {
+        var $loadScenario = $("<div></div>");
+        $loadScenario.load("Scenario/Expedia/expedia_scenario.json", function (response, status, xhr) {
+            if (status == "success") {
+                var scenarioJson = JSON.parse(response.toString());
+                docStatus.storeData = scenarioJson;
+                docStatus.scenarioLoaded = true;
+                dataStore.updateData(docStatus.tabId, docStatus);
+            }
+            else {
+
+            }
+        });
+    };
+
+    //listener methods
+    chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
+        switch (request.action) {
+            case actions.test:
+                sendResponse(actions.test);
+                break;
+            case action.set_document_status:
+                //mole can scrap (first action)
+                dataStore.setData(sender.tab.id, request.data);
+                sendResponse(dataStore.getData(sender.tab.id));
+                break;
+            case action.update_document_status:
+                break;
+            case actions.status:
+                var docStatus = dataStore.getData(sender.tab.id);
+                docStatus.statusLine = "\n" + request.data;
+                dataStore.setData(sender.tab.id, docStatus);
+                o.sendToPopup(request);
+                break;
+            
+            
+            case actions.document_status:
+                if (request.data != null) {
+                    request.data.tabId = sender.tab.id;
+                    dataStore.updateData(sender.tab.id, request.data);
+                    if (request.data.isReady && !request.data.scenarioLoaded) {
+                        //load scenario
+                        o.loadScenario(request.data);
+                    }
+                }
+                var data = communicator.getDocumentStatus(sender.tab.id);
+                sendResponse(data);
+                break;
+            case actions.data_post_save:
+                if (request.data != null) {
+                    request.data.tabId = sender.tab.id;
+                    dataStore.setData(sender.tab.id, request.data);
+                }
+                break;
+            case actions.status:
+                var docStatus = dataStore.getData(sender.tab.id);
+                docStatus.statusLine = "\n" + request.data;
+                dataStore.setData(sender.tab.id, docStatus);
+                o.sendToPopup(request);
+                break;
+        }
+    });
+
+    //send methods
+    this.sendToPopup = function (request, onResponce) {
+        chrome.runtime.sendMessage(request, function (responce) {
+            if (onResponce != null) {
+                onResponce(responce);
+            }
+        });
+    };
+
+    this.sendToCommunicator = function (request, onResponce) {
+        chrome.extension.sendRequest(request, function (responce) {
+            if (onResponce != null) {
+                onResponce(responce);
+            }
+        });
+    };
+
+    this.sendToService = function () {
+
+    };    
+
+    //get methods
+    this.getDocumentStatus = function (currentTabId, onResponce) {
+        if (currentTabId == null) {
+            if (onResponce != null) {
+                o.sendToCommunicator({ action: actions.document_status, data: null }, onResponce);
+            }
+            return;
+        }
+        var docStatus = dataStore.getData(currentTabId);
+        if (docStatus == null) {
+            docStatus = document_status;
+        }
+        else {
+            o.sendToPopup({ action: actions.document_status, data: docStatus });
+        }
+        return docStatus;
+    };
+
+    this.getNewData = function (onDocStatusChanged) {
+        window.setTimeout(function () {
+            o.sendToCommunicator({ action: actions.document_status, data: null }, function (responce) {
+                if (onDocStatusChanged != null) {
+                    onDocStatusChanged(responce);
+                }
+            });
+            o.getNewData(onDocStatusChanged);
+        }, 10);
+    };
+};
+
+function DataStore() {
+    var o = this;
+
+    this.updateData = function (identificator, data) {
+        data.isDataPostedToMole = false;
+        return o.setData(identificator, data);
+    };
+
+    this.setData = function (identificator, data) {
+        try {
+            var sData = JSON.stringify(data);
+            localStorage.setItem(identificator, sData);
+        }
+        catch (e) {
+            return false;
+        }
+        return true;
+    };
+
+    this.getData = function (identificator) {
+        var sData = "";
+        var data = null;
+        try {
+            sData = localStorage.getItem(identificator);
+        }
+        catch (e) {
+            return null;
+        }
+        try {
+            data = JSON.parse(sData);
+        }
+        catch (e) {
+            return null;
+        }
+        return data;
+    };
+};
+
+var communicator = new Communicator();
+var dataStore = new DataStore();

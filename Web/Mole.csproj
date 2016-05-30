@@ -93,7 +93,8 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="ScraperExtention\manifest.json" />
-    <Content Include="ScraperExtention\Scenario\Expedia\expedia_scenario.json" />
+    <Content Include="ScraperExtention\scenario\expedia\expedia_scenario.json" />
+    <Content Include="ScraperExtention\scenario\scraping_scenario.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
