@@ -1,0 +1,4 @@
+D:\Scraper_Project\mole\Web\bin\Mole.dll
+D:\Scraper_Project\mole\Web\bin\Mole.pdb
+D:\Scraper_Project\mole\Web\obj\Debug\Mole.dll
+D:\Scraper_Project\mole\Web\obj\Debug\Mole.pdb

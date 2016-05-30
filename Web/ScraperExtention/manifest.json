@@ -1,0 +1,24 @@
+﻿{
+	"manifest_version": 2,
+	"name": "Scraper",
+	"description": "Scrap the Sites",
+	"version": "1.0",
+	"permissions": ["tabs", "sessions"],
+	"content_scripts": [
+		{
+		  "matches": ["http://4965.com/*","https://4965.com/*","http://www.expedia.com/*","https://www.expedia.com/*"],
+		  "js": ["jquery.js", "communicator.js", "mole.js"]
+		}
+	],
+	"browser_action": {
+		"default_icon": "mole.png",
+		"default_popup": "popup.htm"
+	},
+	"icons": { "16": "mole.png",
+           "48": "mole.png",
+          "128": "mole.png" 
+	},
+	"background": {
+		"scripts": ["jquery.js", "communicator.js"]
+	}
+}
