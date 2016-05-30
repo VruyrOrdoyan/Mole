@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+//        var jData = {
+//            UserData: JSON.stringify({ FirstName: "John", LastName: "Rambo" })
+//        };
+//        var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+//        
+//        xmlhttp.open("POST", "/index.aspx");
+//        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+//        xmlhttp.send(jData);
+
+        
+
+        var Task = {
+            TaskKey: "555",
+            File: "",
+            Channel: "",
+            Location: "",
+            DateFrom: "",
+            DateTo: "",
+            Properties: new Array()
+        };
+
+
+        function SendAjaxPOST(data) {
+            var xmlHttp;
+            xmlHttp = null;
+            if (window.XMLHttpRequest) {
+                xmlHttp = new XMLHttpRequest();
+            }
+            else if (window.ActiveXObject) {
+                var strName = "Msxml2.XMLHTTP"
+                if (navigator.appVersion.indexOf("MSIE 5.5") >= 0) {
+                    strName = "Microsoft.XMLHTTP"
+                }
+                try {
+                    xmlHttp = new ActiveXObject(strName);
+                }
+                catch (e) {
+                    alert("Error. Scripting for ActiveX might be disabled")
+                    return false;
+                }
+            }
+            if (xmlHttp != null) {
+                var userName = "manasm";
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        alert(xmlHttp.responseText);
+                    }
+                }
+                xmlHttp.open("POST", "index.aspx", true);
+                xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlHttp.send("ScrapData=" + JSON.stringify(data));
+            }
+        }
+        SendAjaxPOST(Task); 
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
