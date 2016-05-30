@@ -1,26 +1,4 @@
-﻿//util
-function getQueryParameterByUrl(url, name) {
-    var qs = url.substring(1);
-    name = name + "=";
-    if (qs.length > 0) {
-        var pos = qs.indexOf(name);
-        if (pos != -1) {
-            pos += name.length;
-            end = qs.indexOf("&", pos);
-            if (end == -1) {
-                end = qs.length
-            }
-            return unescape(qs.substring(pos, end));
-        }
-    }
-    return null;
-};
-
-function getQueryParameter(name) {
-    return getQueryParameterByUrl(window.top.location.search, name);
-};
-
-var docStatus = document_status;
+﻿var docStatus = document_status;
 docStatus.moleCanScrap = true;
 
 communicator.sendToCommunicator({ action: actions.set_document_status, data: docStatus }, function (responce) {
@@ -64,19 +42,7 @@ function Mole(docStatus) {
                 //mole page identification
                 var lastPage = o.getNotCompletedLastPage(o.docStatus.gloabalScenario);
                 if (o.pageIdentification(lastPage)) {
-                    communicator.sendToCommunicator({ action: actions.status_message, data: scraper_status_codes.scraper_read_task }, function (responce) {
-                        o.docStatus = responce;
-                        for (var stepIndex = 0; stepIndex < lastPage.Steps.length; stepIndex++) {
-                            var step = lastPage.Steps[stepIndex];
-                            o.docStatus.task[step.SetValue] = doAction(step);
-                        }
-                        communicator.sendToCommunicator({ action: actions.set_document_status, data: o.docStatus }, function (responce) {
-                            communicator.sendToCommunicator({ action: actions.status_message, data: scraper_status_codes.scraper_finish_read_task }, function (responce) {
-                                o.docStatus = responce;
-
-                            });
-                        });
-                    });
+                    alert("Mole Page");
                 }
             }
         });
@@ -85,7 +51,7 @@ function Mole(docStatus) {
     this.pageIdentification = function (page) {
         for (var identificationIndex = 0; identificationIndex < page.Identifications.length; identificationIndex++) {
             var identification = page.Identifications[identificationIndex];
-            if (!doAction(identification)) {
+            if (!chekIdentification(identification)) {
                 page.IdentificationPassed = false;
                 break;
             }
@@ -99,12 +65,7 @@ function Mole(docStatus) {
         return true;
     };
 
-    function getData(step) {
-        var actionData = null;
-        eval("actionData = " + identification.Action);
-    };
-
-    function doAction(identification) {
+    function chekIdentification(identification) {
         var actionData = null;
         eval("actionData = " + identification.Action);
         switch (identification.Type) {
@@ -112,11 +73,9 @@ function Mole(docStatus) {
                 if (actionData.indexOf(identification.Contains) != -1 || actionData == identification.Contains) {
                     identification.Passed = true;
                 }
-                return identification.Passed;
-            case "Get":
-                return actionData;
+                break;
         }
-        return null;
+        return identification.Passed;
     };
 
     this.getNotCompletedLastPage = function (scenario) {
@@ -139,7 +98,7 @@ function execute() {
             var lastPage = getLastPage();
             for (var identificationIndex = 0; identificationIndex < lastPage.Identifications.length; identificationIndex++) {
                 var identification = lastPage.Identifications[identificationIndex];
-                if (!doAction(identification)) {
+                if (!chekIdentification(identification)) {
                     lastPage.IdentificationPassed = false;
                     break;
                 }
@@ -156,7 +115,7 @@ function execute() {
             }
             //var lastIdentification = getLastIdentification(lastPage);
             //while (lastIdentification != null) {
-            //    lastPage.IdentificationPassed = doAction(lastIdentification);
+            //    lastPage.IdentificationPassed = chekIdentification(lastIdentification);
             //    if (!lastPage.IdentificationPassed) {
             //        break;
             //    }
@@ -193,7 +152,7 @@ function getLastIdentification(page) {
     return null;
 };
 
-function doAction(identification) {
+function chekIdentification(identification) {
     var actionData = null;
     eval("actionData = " + identification.Action);
     switch (identification.Type) {

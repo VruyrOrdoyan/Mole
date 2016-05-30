@@ -69,13 +69,14 @@ function Mole(docStatus) {
                         for (var stepIndex = 0; stepIndex < lastPage.Steps.length; stepIndex++) {
                             var step = lastPage.Steps[stepIndex];
                             o.docStatus.task[step.SetValue] = doAction(step);
+                            //alert(o.docStatus.task.taskKey);
                         }
                         communicator.sendToCommunicator({ action: actions.set_document_status, data: o.docStatus }, function (responce) {
                             communicator.sendToCommunicator({ action: actions.status_message, data: scraper_status_codes.scraper_finish_read_task }, function (responce) {
                                 o.docStatus = responce;
-
                             });
                         });
+                        
                     });
                 }
             }

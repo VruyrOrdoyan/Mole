@@ -1,0 +1,80 @@
+﻿{
+	"AllowPages": [
+		{
+			"Id": 1,
+			"Name": "Mole",
+			"Compleated": false,
+			"IdentificationPassed": false,
+			"Identifications": [
+				{
+					"Id": 1,
+					"Name": "URL Identification",
+					"Action": "document.URL",
+					"Type": "Contains",
+					"Contains": "4965.com",
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Title Identification",
+					"Action": "document.title",
+					"Type": "Contains",
+					"Contains": "Mole",
+					"Passed": false,
+					"Compleated": false
+				}
+			],
+			"Steps": [
+				{
+					"Id": 1,
+					"Name": "Read Task Key",
+					"Action": "getQueryParameter('taskkey')",
+					"Type": "Get",
+					"SetValue": "taskKey",
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Read File Path",
+					"Action": "getQueryParameter('file')",
+					"Type": "Get",
+					"SetValue": "file",
+					"Compleated": false
+				},
+				{
+					"Id": 3,
+					"Name": "Read Channel",
+					"Action": "getQueryParameter('channel')",
+					"Type": "Get",
+					"SetValue": "channel",
+					"Compleated": false
+				},
+				{
+					"Id": 4,
+					"Name": "Read Location",
+					"Action": "getQueryParameter('location')",
+					"Type": "Get",
+					"SetValue": "location",
+					"Compleated": false
+				},
+				{
+					"Id": 5,
+					"Name": "Read Date From",
+					"Action": "getQueryParameter('datefrom')",
+					"Type": "Get",
+					"SetValue": "dateFrom",
+					"Compleated": false
+				},
+				{
+					"Id": 6,
+					"Name": "Read Date To",
+					"Action": "getQueryParameter('dateto')",
+					"Type": "Get",
+					"SetValue": "dateTo",
+					"Compleated": false
+				}
+			]
+		}
+	]
+}
