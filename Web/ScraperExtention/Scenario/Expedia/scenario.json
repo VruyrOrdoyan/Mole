@@ -164,7 +164,7 @@
 					"Id": 4,
 					"Name": "Properties",
 					"StatusCode": 127,
-					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').children().length",
+					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper').length",
 					"AllowAsynchron": true,
 					"Type": "EqualsMore",
 					"EqualsMore": 1,
@@ -175,23 +175,79 @@
 			"Steps": [
 				{
 					"Id": 1,
-					"Name": "Create New Propert",
+					"Name": "Get Property Name",
 					"Enable": false,
 					"StatusCode": 128,
-					"Action": "new Object()",
+					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children(.hotelWrapper)[0]).find('span.hotelName').text();",
+					"Type": "Get",
 					"SetValue": "properties",
-					"Type": "Set",
+					"ObjectField": "name",
 					"Compleated": false
 				},
 				{
 					"Id": 2,
-					"Name": "Get Property Name",
-					"Enable": false,
+					"Name": "Property Iteration",
 					"StatusCode": 129,
-					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children()[0]).find('span.hotelName').text();",
-					"Type": "Get",
+					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')).length > 0",
+					"Type": "Iteration",
 					"SetValue": "properties",
-					"ObjectField": "name",
+					"IterationIndex": 0,
+					"Passed": false,
+					"Compleated": false,
+					"Steps": [
+						{
+							"Id": 1,
+							"Name": "Get Property Name",
+							"StatusCode": 130,
+							"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')[0]).find('span.hotelName').text();",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "name",
+							"Compleated": false
+						},
+						{
+							"Id": 1,
+							"Name": "Get Property Name",
+							"StatusCode": 131,
+							"Action": "$($($($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper'))[1]).find('.actualPrice.fakeLink')[0]).text();",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "price",
+							"Compleated": false
+						},
+						{
+							"Id": 1,
+							"Name": "Get Property Name",
+							"StatusCode": 132,
+							"Action": "$($($($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper'))[1]).find('.target.layout.edsHotel')[0]).attr('href');",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "url",
+							"Compleated": false
+						},
+						{
+							"Id": 3,
+							"Name": "Remove Property Block",
+							"StatusCode": 133,
+							"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')[0]).remove();",
+							"Compleated": false
+						}
+					]
+				},
+				{
+					"Id": 3,
+					"Name": "Next Page",
+					"StatusCode": 134,
+					"Action": "$('.pagination-next').click()",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 4,
+					"Name": "Prepare New Page Collection",
+					"StatusCode": 135,
+					"Action": "StartScenario(2)",
+					"Type": "Internal",
 					"Compleated": false
 				}
 			]

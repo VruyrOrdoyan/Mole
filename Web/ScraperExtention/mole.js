@@ -50,7 +50,12 @@ function onDocumentReady() {
     }
 };
 
-
+function StartScenario(index) {
+    communicator.sendToCommunicator({ action: actions.get_document_status, data: null }, function (responce) {
+        var mole = new Mole(responce);
+        mole.startChannelScenario(index);
+    });
+};
 
 checkDocStatus();
 
@@ -58,6 +63,41 @@ function Mole(docStatus) {
     var o = this;
     this.docStatus = docStatus;
     this.lastPage = null;
+    this.asynchronActionsMaxCount = 100;
+    this.asynchronActionsCount = 0;
+    this.asynchronActionsDuration = 1000;
+
+    this.startChannelScenario = function (index) {
+        var channelScenario = o.docStatus.channelScenario;
+        o.clearPageScenario(o.docStatus.channelScenario, index)
+    };
+
+    this.clearPageScenario = function (scenario, index) {
+        for (var pagesIndex = 0; pagesIndex < scenario.AllowPages.length; pagesIndex++) {
+            var page = scenario.AllowPages[pagesIndex];
+            if (page.Id == index) {
+                page.Compleated = false;
+                o.clearSubSteps(page.Identifications);
+                o.clearSubSteps(page.Steps);
+            }
+        }
+        communicator.sendToCommunicator({ action: actions.set_document_status, data: o.docStatus }, function (responce) {
+            o.docStatus = responce;
+            o.process();
+        });
+    };
+
+    this.clearSubSteps = function (subSteps) {
+        for (var itemIndex = 0; itemIndex < subSteps.length; itemIndex++) {
+            var item = subSteps[itemIndex];
+            item.Compleated = false;
+            item.Passed = false;
+            if (item.Steps != null) {
+                o.clearSubSteps(item.Steps);
+            }
+        }
+    };
+
     this.process = function () {
         if (o.docStatus.scraperInProcess) {
             o.lastPage = o.getNotCompletedLastPage(o.docStatus.channelScenario);
@@ -173,8 +213,8 @@ function Mole(docStatus) {
         }
     };
 
-    this.startSteps = function (page) {
-        var step = o.getLastStep(page);
+    this.startSteps = function (stepOwner) {
+        var step = o.getLastStep(stepOwner);
         if (step != null) {
             var newVal = null;
             if (step.SetValue != null) {
@@ -189,14 +229,20 @@ function Mole(docStatus) {
                     }
                 }
             }
+            if (step.Type == "Iteration") {
+                newVal = o.docStatus.task[step.SetValue].length;
+            }
             var actionVal = doAction(step, newVal);
             if (actionVal != null) {
                 var taskField = o.docStatus.task[step.SetValue];
                 if (typeof taskField === "object" && taskField.length != null) {
-                    taskField[taskField.length] = actionVal;
+                    if (taskField[step.IterationIndex] == null) {
+                        taskField[step.IterationIndex] = {};
+                    }
+                    taskField[step.IterationIndex][step.Field] = actionVal;
                 }
                 else {
-                    taskField = actionVal;
+                    o.docStatus.task[step.SetValue] = actionVal;
                 }
             }
             var status = scraper_status_codes.scraper_optional_code;
@@ -206,7 +252,11 @@ function Mole(docStatus) {
                 o.docStatus = responce;
                 communicator.sendToCommunicator({ action: actions.status_message, data: status }, function (responce) {
                     o.docStatus = responce;
-                    o.startSteps(page);
+                    if (o.docStatus.stopPropertyCollection) {
+                        o.startCommectUnits();
+                        return;
+                    }
+                    o.startSteps(stepOwner);
                 });
             });
         }
@@ -224,6 +274,10 @@ function Mole(docStatus) {
                 });
             }
         }
+    };
+
+    this.startCommectUnits = function () {
+        alert("start scrap Units");
     };
 
     function doAction(action, newVal) {
@@ -271,6 +325,8 @@ function Mole(docStatus) {
                     }
                 }
                 break;
+            case "Set":
+                break;
             case "More":
                 if (typeof actionData === "number" && typeof action.EqualsMore === "number") {
                     if (actionData > action.EqualsMore) {
@@ -278,14 +334,24 @@ function Mole(docStatus) {
                     }
                 }
                 break;
+            case "Iteration":
+                if (actionData) {
+                    action.IterationIndex = newVal;
+                    //if (action.IterationIndex == null) {
+                    //    action.IterationIndex = newVal;
+                    //}
+                    //else {
+                    //    action.IterationIndex++;
+                    //}
+                }
+                else {
+                    action.Passed = true;
+                }
+                break;
         }
         return null;
     };
-
-    this.asynchronActionsMaxCount = 100;
-    this.asynchronActionsCount = 0;
-    this.asynchronActionsDuration = 1000;
-
+    
     function doAsynchronAction(action, newVal, page, callback) {
         window.setTimeout(function () {
             doAction(action, newVal);
@@ -320,11 +386,25 @@ function Mole(docStatus) {
         return null;
     };
 
-    this.getLastStep = function (page) {
-        for (var stepIndex = 0; stepIndex < page.Steps.length; stepIndex++) {
-            var step = page.Steps[stepIndex];
+    this.getLastStep = function (stepOwner) {
+        for (var stepIndex = 0; stepIndex < stepOwner.Steps.length; stepIndex++) {
+            var step = stepOwner.Steps[stepIndex];
             if (step.Enable != null && !step.Enable) {
                 continue;
+            }
+            if (step.Type != null && step.Type == "Iteration" && step.Compleated && !step.Passed) {
+                var subStep = o.getLastStep(step);
+                if (subStep == null) {
+                    for (var subStepIndex = 0; subStepIndex < step.Steps.length; subStepIndex++) {
+                        var subStep = step.Steps[subStepIndex];
+                        subStep.Compleated = false;
+                    }
+                    return step;
+                }
+                else {
+                    subStep.IterationIndex = step.IterationIndex;
+                    return subStep;
+                }
             }
             if (!step.Compleated) {
                 step.Compleated = true

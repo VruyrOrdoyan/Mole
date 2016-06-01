@@ -104,6 +104,7 @@ function MolePopup(identification) {
     this.$txtDateTo = $("#txtDateTo");
     this.$btnStartScrap = $("#btnStartScrap");
     this.$btnGoToMole = $("#btnGoToMole");
+    this.$propCount = $("#propCount");
 
     this.ready = function () {
         
@@ -207,6 +208,8 @@ function MolePopup(identification) {
                 o.$btnStartScrap.show();
                 break;
         }
+
+        o.$propCount.html(data.task.properties.length);
     };
 
     this.removeCurrentStatus = function () {
