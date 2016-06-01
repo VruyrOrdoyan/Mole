@@ -65,12 +65,15 @@
     <Content Include="Index.aspx" />
     <Content Include="index.html" />
     <Content Include="ScraperExtention\communicator.js" />
+    <Content Include="ScraperExtention\jquery-ui.css" />
+    <Content Include="ScraperExtention\jquery-ui.min.js" />
     <Content Include="ScraperExtention\mole-popup.js" />
     <Content Include="ScraperExtention\jquery.js" />
     <Content Include="ScraperExtention\mole-popup.css" />
     <Content Include="ScraperExtention\mole.js" />
     <Content Include="ScraperExtention\mole.png" />
     <Content Include="ScraperExtention\popup.htm" />
+    <Content Include="ScraperExtention\ui-icons_222222_256x240.png" />
     <Content Include="test.htm" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

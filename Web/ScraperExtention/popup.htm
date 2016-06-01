@@ -2,28 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Scraper</title>
-    <link rel="Stylesheet" href="mole-popup.css" />
+    <link href="jquery-ui.css" rel="stylesheet" />
+    <link rel="Stylesheet" href="mole-popup.css"/>
+   <!-- <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />-->
     <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="mole-popup.js"></script>
+    <script src="jquery-ui.min.js"></script>
     <script type="text/javascript" src="communicator.js"></script>
+    <script type="text/javascript" src="mole-popup.js"></script>
 </head>
 <body class="loading">
-    TaskKey: <input type="text" id="txtTaskKey" />
-    <br />
-    File: <input type="text" id="txtFile" />
-    <br />
-    Channel: <input type="text" id="txtChannel" />
-    <br />
-    Location: <input type="text" id="txtLocation" />
-    <br />
-    DateFrom: <input type="text" id="txtDateFrom" />
-    <br />
-    DateTo: <input type="text" id="txtDateTo" />
-    <br />
-    <textarea id="statusArea"></textarea>
-    <br />
-    <button id="btnDisplayStatus">Display Status</button>
-    <button id="btnRemoveStatus">Remove Status</button>
-    <button id="btnReload">Reload</button>
+    <div class="input_field">
+        <div class="input_label">Task Key: </div>
+        <input type="text" id="txtTaskKey" />
+    </div>
+
+    <div class="input_field">
+        <div class="input_label">File: </div>
+        <input type="text" id="txtFile" />
+    </div>
+
+    <div class="input_field">
+        <div class="input_label">Channel: </div>
+        <input type="text" id="txtChannel" />
+    </div>
+    <div class="input_field">
+        <div class="input_label">Location: </div>
+        <input type="text" id="txtLocation" />
+    </div>
+    <div class="input_field">
+        <div class="input_label">Date From: </div>
+        <input type="text" id="txtDateFrom" tabindex="-1" />
+    </div>
+    <div class="input_field">
+        <div class="input_label">Date To: </div>
+        <input type="text" id="txtDateTo" />
+    </div>
+<br/>
+<textarea id="statusArea"></textarea>
+<br/>
+<button id="btnDisplayStatus">Display Status</button>
+<button id="btnRemoveStatus">Remove Status</button>
+<button id="btnReload">Reload</button>
+    
 </body>
 </html>
