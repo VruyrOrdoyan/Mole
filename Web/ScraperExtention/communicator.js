@@ -49,13 +49,15 @@ var document_status = {
     isReady: false,
     scraperInProcess: false,
     tabId: -1,
-    //scenarioLoaded: false,
-    //isDataPostedToMole: true,
     gloabalScenario: null,
     channelScenario: null,
-    //storeData: null,
     statusCodes: new Array(),
     lastStatusCode: null,
+    property: {
+        id: -1,
+        name: "",
+        url: ""
+    },
     task: {
         taskKey: "",
         file: "",

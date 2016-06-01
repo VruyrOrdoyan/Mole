@@ -271,6 +271,13 @@ function Mole(docStatus) {
                     }
                 }
                 break;
+            case "More":
+                if (typeof actionData === "number" && typeof action.EqualsMore === "number") {
+                    if (actionData > action.EqualsMore) {
+                        action.Passed = true;
+                    }
+                }
+                break;
         }
         return null;
     };
