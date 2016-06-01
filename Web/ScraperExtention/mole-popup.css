@@ -1,6 +1,6 @@
 ﻿body.loading 
 {
-    background-color:#FF0000;
+    background-color:#FFFF00;
 }
 
 body.ready 
@@ -12,4 +12,20 @@ textarea
 {
     width:300px;
     height:200px    
+}
+.input_field {
+    margin: 0 0 5px 0;
+    white-space: nowrap;
+    clear: both;
+    position: relative;
+}
+.input_label {
+    font-style: italic;
+    float: left;
+    height: 30px;
+    line-height: 26px;
+    vertical-align: top;
+    min-width: 102px;
+    text-align: right;
+    margin-right: 10px;
 }
