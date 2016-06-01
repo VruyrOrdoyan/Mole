@@ -104,7 +104,7 @@ function MolePopup(identification) {
     this.$txtDateTo = $("#txtDateTo");
 
     this.ready = function () {
-        o.displayCurrentStatus();
+        //o.displayCurrentStatus();
         o.$btnDisplayStatus.unbind("click", o.displayCurrentStatus);
         o.$btnDisplayStatus.bind("click", o.displayCurrentStatus);
         o.$btnRemoveStatus.unbind("click", o.removeCurrentStatus);
@@ -148,7 +148,7 @@ function MolePopup(identification) {
         o.removeCurrentStatus();
         chrome.tabs.reload(o.identification);
     };
-
+ 
     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         switch (request.action) {
             case actions.send_popup:
@@ -164,6 +164,22 @@ function MolePopup(identification) {
 document.addEventListener("DOMContentLoaded", function () {
     chrome.tabs.getSelected(function (o) {
         var molePopup = new MolePopup(o.id);
+        $("#txtDateFrom").datepick({
+            minDate: 0,
+            onSelect: function (selected) {
+                var startDate = new Date(selected);
+                $("#txtDateTo").datepick("option", "minDate", startDate);
+            },
+            autoclose: true
+        });
+        $("#txtDateTo").datepick({
+            minDate: 0,
+            onSelect: function (selected) {
+                var endDate = new Date(selected);
+                $("#txtDateFrom").datepick("option", "maxDate", endDate);
+            },
+            autoclose: true
+        });
         molePopup.ready();
     });
 });
