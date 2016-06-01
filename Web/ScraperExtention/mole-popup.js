@@ -164,19 +164,19 @@ function MolePopup(identification) {
 document.addEventListener("DOMContentLoaded", function () {
     chrome.tabs.getSelected(function (o) {
         var molePopup = new MolePopup(o.id);
-        $("#txtDateFrom").datepick({
+        $("#txtDateFrom").datepicker({
             minDate: 0,
             onSelect: function (selected) {
                 var startDate = new Date(selected);
-                $("#txtDateTo").datepick("option", "minDate", startDate);
+                $("#txtDateTo").datepicker("option", "minDate", startDate);
             },
             autoclose: true
         });
-        $("#txtDateTo").datepick({
+        $("#txtDateTo").datepicker({
             minDate: 0,
             onSelect: function (selected) {
                 var endDate = new Date(selected);
-                $("#txtDateFrom").datepick("option", "maxDate", endDate);
+                $("#txtDateFrom").datepicker("option", "maxDate", endDate);
             },
             autoclose: true
         });
