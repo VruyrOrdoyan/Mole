@@ -1,0 +1,204 @@
+﻿{
+	"AllowPages": [
+		{
+			"Id": 1,			
+			"Name": "Search",
+			"StatusCode": 110,
+			"Compleated": false,
+			"IdentificationPassed": false,
+			"Identifications": [
+				{
+					"Id": 1,
+					"Name": "URL Identification",
+					"StatusCode": 111,
+					"Action": "document.URL",
+					"Type": "Contains",
+					"Contains": "expedia.com",
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Title Identification",
+					"StatusCode": 112,
+					"Action": "document.title",
+					"Type": "Contains",
+					"Contains": "Expedia Travel",
+					"Passed": false,
+					"Compleated": false
+				}
+			],
+			"Steps": [
+				{
+					"Id": 1,
+					"Name": "Click Hotel",
+					"StatusCode": 113,
+					"Action": "document.getElementById('tab-hotel-tab').click()",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Set From Date",
+					"StatusCode": 114,
+					"Action": "$('#hotel-checkin').val('date_from')",
+					"Type": "ReplaceString",
+					"InsertValue": "date_from",
+					"SetValue": "dateFrom",
+					"Compleated": false
+				},
+				{
+					"Id": 3,
+					"Name": "Click Checkin",
+					"StatusCode": 115,
+					"Action": "document.getElementById(\"hotel-checkin\").click()",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 4,
+					"Name": "Click From Date",
+					"StatusCode": 116,
+					"Action": "$(\".cal-date[data-year='date_from_year'][data-month='date_from_month'][data-day='date_from_day']\")[0].click()",
+					"Type": "ReplaceString",
+					"InsertValue": ["date_from_year", "date_from_month", "date_from_day"],
+					"SetValue": ["dateFromYear", "dateFromMonth", "dateFromDay"],
+					"Compleated": false
+				},
+				{
+					"Id": 5,
+					"Name": "Click Checkout",
+					"StatusCode": 117,
+					"Action": "window.setTimeout(function () { document.getElementById(\"hotel-checkout\").click();}, 100);",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 6,
+					"Name": "Set destination (location)",
+					"StatusCode": 118,
+					"Action": "window.setTimeout(function () { $('#hotel-destination').val('location');}, 100);",
+					"Type": "ReplaceString",
+					"InsertValue": "location",
+					"SetValue": "location",
+					"Compleated": false
+				},
+				{
+					"Id": 7,
+					"Name": "Click destination",
+					"StatusCode": 119,
+					"Action": "window.setTimeout(function () { $('#hotel-destination').focus();}, 200);",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 8,
+					"Name": "Set To Date",
+					"StatusCode": 120,
+					"Action": "$('#hotel-checkout').val('date_to')",
+					"Type": "ReplaceString",
+					"InsertValue": "date_to",
+					"SetValue": "dateTo",
+					"Compleated": false
+				},
+				{
+					"Id": 9,
+					"Name": "Click To Date",
+					"StatusCode": 121,
+					"Action": "window.setTimeout(function () { $(\".cal-date[data-year='date_to_year'][data-month='date_to_month'][data-day='date_to_day']\")[0].click();}, 400);",
+					"Type": "ReplaceString",
+					"InsertValue": ["date_to_year", "date_to_month", "date_to_day"],
+					"SetValue": ["dateToYear", "dateToMonth", "dateToDay"],
+					"Compleated": false
+				},
+				{
+					"Id": 7,
+					"Name": "Click Search",
+					"StatusCode": 122,
+					"Action": "window.setTimeout(function () { document.getElementById('search-button').click();}, 300);",
+					"Type": "Click",
+					"Compleated": false
+				}
+			]
+		},
+		{
+			"Id": 2,
+			"Name": "Search Result",
+			"StatusCode": 123,
+			"Compleated": false,
+			"IdentificationPassed": false,
+			"Identifications": [
+				{
+					"Id": 1,
+					"Name": "URL Identification",
+					"StatusCode": 124,
+					"Action": "document.URL",
+					"Type": "Contains",
+					"Contains": "expedia.com",
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Result Set Identification",
+					"StatusCode": 125,
+					"Action": "$('#resultsContainer').length",
+					"AllowAsynchron": true,
+					"Type": "Equals",
+					"Equals": 1,
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 3,
+					"Name": "Property Results",
+					"StatusCode": 126,
+					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').length",
+					"AllowAsynchron": true,
+					"Type": "Equals",
+					"Equals": 1,
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 4,
+					"Name": "Properties",
+					"StatusCode": 127,
+					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').children().length",
+					"AllowAsynchron": true,
+					"Type": "EqualsMore",
+					"EqualsMore": 1,
+					"Passed": false,
+					"Compleated": false
+				}
+			],
+			"Steps": [
+				{
+					"Id": 1,
+					"Name": "Create New Propert",
+					"Enable": false,
+					"StatusCode": 128,
+					"Action": "new Object()",
+					"SetValue": "properties",
+					"Type": "Set",
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Get Property Name",
+					"Enable": false,
+					"StatusCode": 129,
+					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children()[0]).find('span.hotelName').text();",
+					"Type": "Get",
+					"SetValue": "properties",
+					"ObjectField": "name",
+					"Compleated": false
+				}
+			]
+		},
+		{
+			"Id": 3,
+			"Name": "Property Details"
+		}
+	]
+}

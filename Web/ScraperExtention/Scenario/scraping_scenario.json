@@ -3,12 +3,14 @@
 		{
 			"Id": 1,
 			"Name": "Mole",
+			"StatusCode": 100,
 			"Compleated": false,
 			"IdentificationPassed": false,
 			"Identifications": [
 				{
 					"Id": 1,
 					"Name": "URL Identification",
+					"StatusCode": 101,
 					"Action": "document.URL",
 					"Type": "Contains",
 					"Contains": "4965.com",
@@ -18,6 +20,7 @@
 				{
 					"Id": 2,
 					"Name": "Title Identification",
+					"StatusCode": 102,
 					"Action": "document.title",
 					"Type": "Contains",
 					"Contains": "Mole",
@@ -29,6 +32,7 @@
 				{
 					"Id": 1,
 					"Name": "Read Task Key",
+					"StatusCode": 103,
 					"Action": "getQueryParameter('taskkey')",
 					"Type": "Get",
 					"SetValue": "taskKey",
@@ -37,6 +41,7 @@
 				{
 					"Id": 2,
 					"Name": "Read File Path",
+					"StatusCode": 104,
 					"Action": "getQueryParameter('file')",
 					"Type": "Get",
 					"SetValue": "file",
@@ -45,6 +50,7 @@
 				{
 					"Id": 3,
 					"Name": "Read Channel",
+					"StatusCode": 105,
 					"Action": "getQueryParameter('channel')",
 					"Type": "Get",
 					"SetValue": "channel",
@@ -53,6 +59,7 @@
 				{
 					"Id": 4,
 					"Name": "Read Location",
+					"StatusCode": 106,
 					"Action": "getQueryParameter('location')",
 					"Type": "Get",
 					"SetValue": "location",
@@ -61,6 +68,7 @@
 				{
 					"Id": 5,
 					"Name": "Read Date From",
+					"StatusCode": 107,
 					"Action": "getQueryParameter('datefrom')",
 					"Type": "Get",
 					"SetValue": "dateFrom",
@@ -69,12 +77,24 @@
 				{
 					"Id": 6,
 					"Name": "Read Date To",
+					"StatusCode": 108,
 					"Action": "getQueryParameter('dateto')",
 					"Type": "Get",
 					"SetValue": "dateTo",
 					"Compleated": false
 				}
-			]
+			],
+			"Navigation":
+			{
+				"Id": 1,
+				"Name": "Navigate to Channel",
+				"StatusCode": 109,
+				"Action": "window.location = 'https:\\www.mole_channel.com';",
+				"Type": "ReplaceString",
+				"InsertValue": "mole_channel",
+				"SetValue": "channel",
+				"Compleated": false
+			}
 		}
 	]
 }

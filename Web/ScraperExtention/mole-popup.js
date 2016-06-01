@@ -102,15 +102,72 @@ function MolePopup(identification) {
     this.$txtLocation = $("#txtLocation");
     this.$txtDateFrom = $("#txtDateFrom");
     this.$txtDateTo = $("#txtDateTo");
+    this.$btnStartScrap = $("#btnStartScrap");
+    this.$btnGoToMole = $("#btnGoToMole");
 
     this.ready = function () {
-        //o.displayCurrentStatus();
+        
+        o.displayCurrentStatus();
+        
+
         o.$btnDisplayStatus.unbind("click", o.displayCurrentStatus);
         o.$btnDisplayStatus.bind("click", o.displayCurrentStatus);
         o.$btnRemoveStatus.unbind("click", o.removeCurrentStatus);
         o.$btnRemoveStatus.bind("click", o.removeCurrentStatus);
+        
         o.$btnReload.unbind("click", o.reload);
         o.$btnReload.bind("click", o.reload);
+        
+        o.$btnStartScrap.unbind("click", o.scrap);
+        o.$btnStartScrap.bind("click", o.scrap);
+
+        o.$btnGoToMole.unbind("click", o.goToMole);
+        o.$btnGoToMole.bind("click", o.goToMole);
+    };
+
+    this.goToMole = function () {
+        chrome.tabs.update({
+            url: "http://4965.com/"
+        });
+    };
+
+    this.scrap = function () {
+
+        //set test data
+        o.$txtChannel.val("expedia");
+        o.$txtLocation.val("new york");
+        o.$txtDateFrom.val("06/02/2016");
+        o.$txtDateTo.val("06/08/2016");
+
+        var data = o.dataStore.getData(o.identification);
+        var channel = o.$txtChannel.val();
+        var location = o.$txtLocation.val();
+        var dateFrom = o.$txtDateFrom.val();
+        var dateTo = o.$txtDateTo.val();
+        if (!channel.isNullOrEmpty() && !location.isNullOrEmpty() && !dateFrom.isNullOrEmpty() && !dateTo.isNullOrEmpty()) {
+            //check date
+            //
+            data.task.channel = channel;
+            data.task.location = location;
+            data.task.dateFrom = dateFrom;
+            data.task.dateTo = dateTo;
+            data.task.type = taskTypes.test;
+
+
+            data.task.dateFromObj = convertToDateObj(data.task.dateFrom);
+            data.task.dateFromYear = data.task.dateFromObj.getFullYear();
+            data.task.dateFromMonth = data.task.dateFromObj.getMonth();
+            data.task.dateFromDay = data.task.dateFromObj.getDate();
+            data.task.dateToObj = convertToDateObj(data.task.dateTo);
+            data.task.dateToYear = data.task.dateToObj.getFullYear();
+            data.task.dateToMonth = data.task.dateToObj.getMonth();
+            data.task.dateToDay = data.task.dateToObj.getDate();
+
+            o.dataStore.setData(o.identification, data);
+        }
+        else {
+            //validation message
+        }
     };
 
     this.displayCurrentStatus = function () {
@@ -135,6 +192,21 @@ function MolePopup(identification) {
         o.$txtLocation.val(data.task.location);
         o.$txtDateFrom.val(data.task.dateFrom);
         o.$txtDateTo.val(data.task.dateTo);
+        
+        switch (data.task.type) {
+            case taskTypes.none:
+                o.$btnStartScrap.hide();
+                break;
+            case taskTypes.fullTask:
+                o.$btnStartScrap.hide();
+                break;
+            case taskTypes.test:
+                o.$btnStartScrap.show();
+                break;
+            case taskTypes.undefined:
+                o.$btnStartScrap.show();
+                break;
+        }
     };
 
     this.removeCurrentStatus = function () {
