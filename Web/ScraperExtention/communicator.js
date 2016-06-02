@@ -71,7 +71,7 @@ var document_status = {
         dateToDay: 0,
         type: taskTypes.none,
         checkPropId: 0,
-        propertiesMaxCount: 200,
+        propertiesMaxCount: 10,
         properties: new Array()
     }
 };

@@ -154,18 +154,23 @@ function Mole(docStatus) {
 
     this.navigate = function () {
         //navigate to channel
-        communicator.sendToCommunicator({ action: actions.status_message, data: scraper_status_codes.scraper_start }, function (responce) {
-            o.docStatus = responce;
-            o.docStatus.scraperInProcess = true;
-            communicator.sendToCommunicator({ action: actions.set_document_status, data: o.docStatus }, function (responce) {
+        if (!o.docStatus.scraperInProcess) {
+            communicator.sendToCommunicator({ action: actions.status_message, data: scraper_status_codes.scraper_start }, function (responce) {
                 o.docStatus = responce;
-                communicator.sendToCommunicator({ action: actions.load_channel_scenario, data: null }, function (responce) {
+                o.docStatus.scraperInProcess = true;
+                communicator.sendToCommunicator({ action: actions.set_document_status, data: o.docStatus }, function (responce) {
                     o.docStatus = responce;
-                    var channel = o.docStatus.task[o.lastPage.Navigation.SetValue];
-                    doAction(o.lastPage.Navigation, channel);
+                    communicator.sendToCommunicator({ action: actions.load_channel_scenario, data: null }, function (responce) {
+                        o.docStatus = responce;
+                        var channel = o.docStatus.task[o.lastPage.Navigation.SetValue];
+                        doAction(o.lastPage.Navigation, channel);
+                    });
                 });
             });
-        });
+        }
+        else {
+            doAction(o.lastPage.Navigation);
+        }
     };
 
     this.pageIdentification = function (page) {
@@ -253,7 +258,7 @@ function Mole(docStatus) {
                 communicator.sendToCommunicator({ action: actions.status_message, data: status }, function (responce) {
                     o.docStatus = responce;
                     if (o.docStatus.stopPropertyCollection) {
-                        o.startCommectUnits();
+                        o.navigate();
                         return;
                     }
                     o.startSteps(stepOwner);
@@ -276,8 +281,9 @@ function Mole(docStatus) {
         }
     };
 
-    this.startCommectUnits = function () {
-        alert("start scrap Units");
+    this.startColectUnits = function () {
+        var prop = o.getLastProperty();
+        window.location = prop.url;
     };
 
     function doAction(action, newVal) {
@@ -409,6 +415,16 @@ function Mole(docStatus) {
             if (!step.Compleated) {
                 step.Compleated = true
                 return step;
+            }
+        }
+        return null;
+    };
+
+    this.getLastProperty = function () {
+        for (var propIndex = 0; propIndex < o.docStatus.task.properties.length; propIndex++) {
+            var prop = o.docStatus.task.properties[propIndex];
+            if (prop.complite == null) {
+                return prop;
             }
         }
         return null;
