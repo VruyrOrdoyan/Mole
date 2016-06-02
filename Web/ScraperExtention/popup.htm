@@ -7,13 +7,16 @@
    <!-- <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />-->
     <script type="text/javascript" src="jquery.js"></script>
     <script src="jquery-ui.min.js"></script>
+
     <script type="text/javascript" src="communicator.js"></script>
     <script type="text/javascript" src="mole-popup.js"></script>
+    <script src="autocomplete.js"></script>
+
 </head>
 <body class="loading">
     <div class="input_field">
         <div class="input_label">Task Key: </div>
-        <input type="text" id="txtTaskKey" />
+        <input type="text" id="txtTaskKey" disabled="disabled" />
     </div>
 
     <div class="input_field">
@@ -23,11 +26,28 @@
 
     <div class="input_field">
         <div class="input_label">Channel: </div>
-        <input type="text" id="txtChannel" />
+        <select id="txtChannel">
+            <option value=""></option>
+            <option value="BOOKING">BOOKING</option>
+            <option value="BOOKIT">BOOKIT</option>
+            <option value="EXPEDIA">EXPEDIA</option>
+            <option value="HOTELS">HOTELS</option>
+            <option value="ORBITZ">ORBITZ</option>
+            <option value="PRICELINE">PRICELINE</option>
+            <option value="TRAVELOCITY">TRAVELOCITY</option>
+        </select>
     </div>
-    <div class="input_field">
+    <div class="input_field" tabindex="-1">
         <div class="input_label">Location: </div>
-        <input type="text" id="txtLocation" />
+        <select id="txtLocation">
+            <option value=""></option>
+            <option value="Appleton, WI, US">Appleton, WI, US</option>
+            <option value="APPLETOWN,  WI,  US">APPLETOWN, WI, US</option>
+            <option value="Frisco, CO, US">Frisco, CO, US</option>
+            <option value="Philipsburg,  SX">Philipsburg, SX</option>
+            <option value="Silverthorne, CO, US">Silverthorne, CO, US</option>
+            <option value="Taos, NM, US">Taos, NM, US</option>
+        </select>
     </div>
     <div class="input_field">
         <div class="input_label">Date From: </div>

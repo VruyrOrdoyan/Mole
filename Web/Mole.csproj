@@ -67,6 +67,7 @@
     <Content Include="ScraperExtention\communicator.js" />
     <Content Include="ScraperExtention\jquery-ui.css" />
     <Content Include="ScraperExtention\jquery-ui.min.js" />
+    <Content Include="ScraperExtention\autocomplete.js" />
     <Content Include="ScraperExtention\mole-popup.js" />
     <Content Include="ScraperExtention\jquery.js" />
     <Content Include="ScraperExtention\mole-popup.css" />
