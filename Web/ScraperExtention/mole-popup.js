@@ -135,10 +135,10 @@ function MolePopup(identification) {
     this.scrap = function () {
 
         //set test data
-        o.$txtChannel.val("expedia");
-        o.$txtLocation.val("new york");
-        o.$txtDateFrom.val("06/02/2016");
-        o.$txtDateTo.val("06/08/2016");
+        //o.$txtChannel.val("expedia");
+        //o.$txtLocation.val("new york");
+        //o.$txtDateFrom.val("06/02/2016");
+        //o.$txtDateTo.val("06/08/2016");
 
         var data = o.dataStore.getData(o.identification);
         var channel = o.$txtChannel.val();
@@ -241,20 +241,24 @@ document.addEventListener("DOMContentLoaded", function () {
         var molePopup = new MolePopup(o.id);
         $("#txtDateFrom").datepicker({
             minDate: 0,
-            onSelect: function (selected) {
+            onSelect: function(selected) {
                 var startDate = new Date(selected);
                 $("#txtDateTo").datepicker("option", "minDate", startDate);
             },
             autoclose: true
         });
+       
         $("#txtDateTo").datepicker({
             minDate: 0,
-            onSelect: function (selected) {
+            onSelect: function(selected) {
                 var endDate = new Date(selected);
                 $("#txtDateFrom").datepicker("option", "maxDate", endDate);
             },
             autoclose: true
-        });
+        }).val(new Date());
         molePopup.ready();
+        $('#txtChannel').val("EXPEDIA");
+        $("#txtDateFrom").datepicker("setDate", "0");
+        $("#txtDateTo").datepicker("setDate", "0+7");
     });
 });

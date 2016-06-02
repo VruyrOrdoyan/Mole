@@ -87,7 +87,7 @@
 					"Id": 7,
 					"Name": "Click destination",
 					"StatusCode": 119,
-					"Action": "window.setTimeout(function () { $('#hotel-destination').focus();}, 400);",
+					"Action": "window.setTimeout(function () { $('#hotel-destination').focus();}, 1000);",
 					"Type": "Click",
 					"Compleated": false
 				},
@@ -105,7 +105,7 @@
 					"Id": 9,
 					"Name": "Click To Date",
 					"StatusCode": 121,
-					"Action": "window.setTimeout(function () { $(\".cal-date[data-year='date_to_year'][data-month='date_to_month'][data-day='date_to_day']\")[0].click();}, 800);",
+					"Action": "window.setTimeout(function () { $(\".cal-date[data-year='date_to_year'][data-month='date_to_month'][data-day='date_to_day']\")[0].click();}, 2000);",
 					"Type": "ReplaceString",
 					"InsertValue": ["date_to_year", "date_to_month", "date_to_day"],
 					"SetValue": ["dateToYear", "dateToMonth", "dateToDay"],
