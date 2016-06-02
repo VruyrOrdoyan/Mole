@@ -53,11 +53,7 @@ var document_status = {
     channelScenario: null,
     statusCodes: new Array(),
     lastStatusCode: null,
-    property: {
-        id: -1,
-        name: "",
-        url: ""
-    },
+    stopPropertyCollection: false,
     task: {
         taskKey: "",
         file: "",
@@ -75,6 +71,7 @@ var document_status = {
         dateToDay: 0,
         type: taskTypes.none,
         checkPropId: 0,
+        propertiesMaxCount: 10,
         properties: new Array()
     }
 };
@@ -334,6 +331,9 @@ function Communicator(){
         var identification = o.getIdentification(tab);
         if (identification != null) {
             data.tabId = identification;
+            if (data.task.properties.length == data.task.propertiesMaxCount) {
+                data.stopPropertyCollection = true;
+            }
             dataStore.setData(tab.id, data);
         }
     };

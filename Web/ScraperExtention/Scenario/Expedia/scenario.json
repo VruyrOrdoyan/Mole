@@ -69,7 +69,7 @@
 					"Id": 5,
 					"Name": "Click Checkout",
 					"StatusCode": 117,
-					"Action": "window.setTimeout(function () { document.getElementById(\"hotel-checkout\").click();}, 100);",
+					"Action": "window.setTimeout(function () { document.getElementById(\"hotel-checkout\").click();}, 200);",
 					"Type": "Click",
 					"Compleated": false
 				},
@@ -77,7 +77,7 @@
 					"Id": 6,
 					"Name": "Set destination (location)",
 					"StatusCode": 118,
-					"Action": "window.setTimeout(function () { $('#hotel-destination').val('location');}, 100);",
+					"Action": "window.setTimeout(function () { $('#hotel-destination').val('location');}, 200);",
 					"Type": "ReplaceString",
 					"InsertValue": "location",
 					"SetValue": "location",
@@ -87,7 +87,7 @@
 					"Id": 7,
 					"Name": "Click destination",
 					"StatusCode": 119,
-					"Action": "window.setTimeout(function () { $('#hotel-destination').focus();}, 200);",
+					"Action": "window.setTimeout(function () { $('#hotel-destination').focus();}, 400);",
 					"Type": "Click",
 					"Compleated": false
 				},
@@ -105,7 +105,7 @@
 					"Id": 9,
 					"Name": "Click To Date",
 					"StatusCode": 121,
-					"Action": "window.setTimeout(function () { $(\".cal-date[data-year='date_to_year'][data-month='date_to_month'][data-day='date_to_day']\")[0].click();}, 400);",
+					"Action": "window.setTimeout(function () { $(\".cal-date[data-year='date_to_year'][data-month='date_to_month'][data-day='date_to_day']\")[0].click();}, 800);",
 					"Type": "ReplaceString",
 					"InsertValue": ["date_to_year", "date_to_month", "date_to_day"],
 					"SetValue": ["dateToYear", "dateToMonth", "dateToDay"],
@@ -115,7 +115,7 @@
 					"Id": 7,
 					"Name": "Click Search",
 					"StatusCode": 122,
-					"Action": "window.setTimeout(function () { document.getElementById('search-button').click();}, 300);",
+					"Action": "window.setTimeout(function () { document.getElementById('search-button').click();}, 1000);",
 					"Type": "Click",
 					"Compleated": false
 				}
@@ -164,7 +164,7 @@
 					"Id": 4,
 					"Name": "Properties",
 					"StatusCode": 127,
-					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').children().length",
+					"Action": "$('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper').length",
 					"AllowAsynchron": true,
 					"Type": "EqualsMore",
 					"EqualsMore": 1,
@@ -175,30 +175,133 @@
 			"Steps": [
 				{
 					"Id": 1,
-					"Name": "Create New Propert",
-					"Enable": false,
-					"StatusCode": 128,
-					"Action": "new Object()",
-					"SetValue": "properties",
-					"Type": "Set",
-					"Compleated": false
-				},
-				{
-					"Id": 2,
 					"Name": "Get Property Name",
 					"Enable": false,
-					"StatusCode": 129,
-					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children()[0]).find('span.hotelName').text();",
+					"StatusCode": 128,
+					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children(.hotelWrapper)[0]).find('span.hotelName').text();",
 					"Type": "Get",
 					"SetValue": "properties",
 					"ObjectField": "name",
 					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Property Iteration",
+					"StatusCode": 129,
+					"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')).length > 0",
+					"Type": "Iteration",
+					"SetValue": "properties",
+					"IterationIndex": 0,
+					"Passed": false,
+					"Compleated": false,
+					"Steps": [
+						{
+							"Id": 1,
+							"Name": "Get Property Name",
+							"StatusCode": 130,
+							"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')[0]).find('span.hotelName').text();",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "name",
+							"Compleated": false
+						},
+						{
+							"Id": 1,
+							"Name": "Get Property Price",
+							"StatusCode": 131,
+							"Action": "$($($($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper'))[0]).find('.actualPrice.fakeLink')[0]).text();",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "price",
+							"Compleated": false
+						},
+						{
+							"Id": 1,
+							"Name": "Get Property URL",
+							"StatusCode": 132,
+							"Action": "$($($($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper'))[0]).find('.target.layout.edsHotel')[0]).attr('href');",
+							"Type": "Get",
+							"SetValue": "properties",
+							"Field": "url",
+							"Compleated": false
+						},
+						{
+							"Id": 3,
+							"Name": "Remove Property Block",
+							"StatusCode": 133,
+							"Action": "$($('#resultsContainer').find('.segmented-list.resultsContainer').children('.hotelWrapper')[0]).remove();",
+							"Compleated": false
+						}
+					]
+				},
+				{
+					"Id": 3,
+					"Name": "Next Page",
+					"StatusCode": 134,
+					"Action": "$('.pagination-next').click()",
+					"Type": "Click",
+					"Compleated": false
+				},
+				{
+					"Id": 4,
+					"Name": "Prepare New Page Collection",
+					"StatusCode": 135,
+					"Action": "StartScenario(2)",
+					"Type": "Internal",
+					"Compleated": false
 				}
-			]
+			],
+			"Navigation":
+			{
+				"Id": 1,
+				"Name": "Navigate to Property",
+				"StatusCode": 136,
+				"Action": "o.startColectUnits();",
+				"Type": "Get",
+				"Compleated": false
+			}
 		},
 		{
 			"Id": 3,
-			"Name": "Property Details"
+			"Name": "Unit Details",
+			"StatusCode": 137,
+			"Compleated": false,
+			"IdentificationPassed": false,
+			"Identifications": [
+				{
+					"Id": 1,
+					"Name": "URL Identification",
+					"StatusCode": 138,
+					"Action": "document.URL",
+					"Type": "Contains",
+					"Contains": "expedia.com",
+					"Passed": false,
+					"Compleated": false
+				},
+				{
+					"Id": 2,
+					"Name": "Units",
+					"StatusCode": 139,
+					"Action": "$('.segment.no-target.segment-title.rooms-and-rates-segment').length",
+					"AllowAsynchron": true,
+					"Type": "EqualsMore",
+					"EqualsMore": 1,
+					"Passed": false,
+					"Compleated": false
+				}
+			],
+			"Steps": [
+				{
+					"Id": 1,
+					"Name": "Property Address",
+					"StatusCode": 140,
+					"Action": "$('.address').find('.map-link').find('.street-address').text() + ', ' + $('.address').find('.map-link').find('.city').text() + ', ' + $('.address').find('.map-link').find('.province').text()",
+					"Type": "Get",
+					"SetValue": "properties",
+					"ObjectField": "address",
+					"Compleated": false
+				}
+			]
 		}
 	]
 }
